@@ -1,0 +1,65 @@
+# Deterministic failure signature catalog for post-silicon validation logs.
+# Each signature maps a regex pattern to a failure category. Detection runs
+# before any LLM involvement so every failure is traceable to matched lines.
+- id: SIG_BOOT_WATCHDOG
+  name: Boot watchdog timeout
+  category: boot
+  severity: CRITICAL
+  pattern: "boot watchdog timeout|boot sequence did not complete|system halted"
+  description: Boot sequence stalled or failed to complete handoff.
+
+- id: SIG_THERMAL_TRIP
+  name: Thermal threshold exceeded
+  category: thermal
+  severity: CRITICAL
+  pattern: "thermal threshold exceeded|PROCHOT asserted|thermal shutdown"
+  description: Die temperature exceeded safe operating limits.
+
+- id: SIG_MEM_UE
+  name: Uncorrectable ECC error
+  category: memory
+  severity: CRITICAL
+  pattern: "uncorrectable ECC error|UE storm|memory controller fenced"
+  description: Unrecoverable memory error, potential DIMM or controller fault.
+
+- id: SIG_MEM_CE
+  name: Correctable ECC error
+  category: memory
+  severity: WARNING
+  pattern: "correctable ECC error"
+  description: Recoverable ECC event; may indicate marginal memory.
+
+- id: SIG_PCIE_LINK_FAIL
+  name: PCIe link training failure
+  category: pcie
+  severity: ERROR
+  pattern: "link training failed|stuck in polling LTSSM|enumeration failed"
+  description: PCIe link failed to train or enumerate.
+
+- id: SIG_PCIE_DOWNGRADE
+  name: PCIe link speed downgrade
+  category: pcie
+  severity: WARNING
+  pattern: "downgraded to Gen\\d after retrain"
+  description: Link negotiated below target speed.
+
+- id: SIG_PWR_VR_FAULT
+  name: Voltage regulator fault
+  category: power
+  severity: CRITICAL
+  pattern: "VR fault shutdown|power good deassert|overcurrent"
+  description: Power rail fault or regulator protection trip.
+
+- id: SIG_PWR_DROOP
+  name: Power rail droop
+  category: power
+  severity: WARNING
+  pattern: "droop detected"
+  description: Transient voltage droop under load.
+
+- id: SIG_ATE_PATTERN_MISMATCH
+  name: Test pattern mismatch
+  category: test_pattern
+  severity: ERROR
+  pattern: "test pattern mismatch|logic BIST failure"
+  description: Scan/BIST vector produced an unexpected result.
